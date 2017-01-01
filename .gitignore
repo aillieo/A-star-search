@@ -1,0 +1,17 @@
+# ignore files for native
+frameworks/cocos2d-x
+frameworks/runtime-src
+
+
+
+# OSX
+#
+.DS_Store
+
+
+# Ignore thumbnails created by windows
+Thumbs.db
+
+
+# webstorm
+.idea/
