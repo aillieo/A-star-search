@@ -13,6 +13,9 @@
 
     "jsList" : [
         "src/resource.js",
-        "src/app.js"
+        "src/app.js",
+        "src/LayerBlocks.js",
+        "src/BlockElement.js",
+        "src/GlobalPara.js"
     ]
 }
