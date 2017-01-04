@@ -25,7 +25,17 @@ var LayerBlocks = cc.Layer.extend({
         self.initMatrix();
         
         
+        
+        var touchListener = cc.EventListener.create({
+            event: cc.EventListener.TOUCH_ONE_BY_ONE,
+            swallowTouches: true,
+            target : self,
+            onTouchBegan: self.onTouchBegan
+        });
+        cc.eventManager.addListener(touchListener,self);
 
+
+    
         return true;
     },
 
@@ -109,8 +119,27 @@ var LayerBlocks = cc.Layer.extend({
 
 
 
-    }
+    },
+    
+    
+    onTouchBegan:function(touch , event){
 
+
+        var self = event.getCurrentTarget();
+
+
+        cc.log("touch began");
+
+
+        event.getCurrentTarget().touchStartX = touch.getLocation().x;
+        event.getCurrentTarget().touchStartY = touch.getLocation().y;
+
+
+
+
+        return true;
+
+    }
 
 
 });

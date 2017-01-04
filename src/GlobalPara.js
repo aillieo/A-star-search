@@ -4,9 +4,9 @@
 
 var GlobalPara = {
 
-    blockWidth : 90,
+    blockWidth : 60,
     blockTypes : 5,
-    columns : 6,
-    rows: 8,
+    columns : 9,
+    rows: 12,
     blockGap : 5
 };
