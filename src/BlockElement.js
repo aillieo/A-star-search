@@ -45,6 +45,48 @@ var BlockElement = cc.Sprite.extend({
     setCol : function (col) {
 
         this._pos_col = col;
+    },
+    
+    setTypeIndex : function(typeIndex) {
+    
+        if(typeIndex<0 || typeIndex>= GlobalPara.blockTypes){
+            return;
+        }
+        
+        var self = this;
+        self._typeIndex = typeIndex;
+        switch (typeIndex) {
+        case 0:
+            self.setColor(cc.color(98,98,98));
+            break;
+        case 1:
+            self.setColor(cc.color(255,98,98));
+            break;
+        case 2:
+            self.setColor(cc.color(98,255,98));
+            break;
+        case 3:
+            self.setColor(cc.color(98,98,255));
+            break;
+        case 4:
+            self.setColor(cc.color(255,255,255));
+            break;
+            
+        }
+    },
+    
+    toggleTypeIndex : function() {
+        
+        var self = this;
+        if(self._typeIndex == GlobalPara.blockTypes - 1 ){
+        
+            self.setTypeIndex(0);
+        }
+        else {
+        
+            self.setTypeIndex(self._typeIndex + 1);
+        }
+        
     }
 
 

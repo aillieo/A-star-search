@@ -83,6 +83,7 @@ var LayerBlocks = cc.Layer.extend({
         block.setCol(col);
         
         self.addChild(block);
+        self._blocks[row * GlobalPara.columns + col]=block;
 
         block.setPosition( self.getPositionByDim(row,col));
         
@@ -130,12 +131,9 @@ var LayerBlocks = cc.Layer.extend({
 
         cc.log("touch began");
 
+        var pt = touch.getLocation();
 
-        event.getCurrentTarget().touchStartX = touch.getLocation().x;
-        event.getCurrentTarget().touchStartY = touch.getLocation().y;
-
-
-
+        self.getBlockContainingPoint(pt).toggleTypeIndex();
 
         return true;
 
