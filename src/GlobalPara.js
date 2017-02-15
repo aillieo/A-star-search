@@ -8,5 +8,7 @@ var GlobalPara = {
     blockTypes : 5,
     columns : 9,
     rows: 12,
-    blockGap : 5
+    blockGap : 5,
+    enableAI : false
+
 };

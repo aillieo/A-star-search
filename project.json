@@ -16,6 +16,7 @@
         "src/app.js",
         "src/LayerBlocks.js",
         "src/BlockElement.js",
-        "src/GlobalPara.js"
+        "src/GlobalPara.js",
+        "src/LayerOperation.js"
     ]
 }
