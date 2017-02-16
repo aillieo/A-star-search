@@ -1,10 +1,10 @@
 /**
- * Created by aillieo on 16/9/5.
+ * Created by aillieo on 17/2/16.
  */
 
 
 var LayerOperation = cc.Layer.extend({
-    _isTouchEnabled:false,
+    _isTouchEnabled:true,
     _moveEnded:true,
 
     ctor:function () {

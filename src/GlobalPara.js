@@ -9,6 +9,7 @@ var GlobalPara = {
     columns : 9,
     rows: 12,
     blockGap : 5,
-    enableAI : false
+    enableAI : false,
+    moveInterval : 0.5
 
 };
