@@ -186,7 +186,7 @@ var LayerBlocks = cc.Layer.extend({
         // catch food
         if((next_pos.x == self._food.x) && (next_pos.y == self._food.y))
         {
-            cc.log("catch food");
+            //cc.log("catch food");
 
             self.snakeGrow();
             self.moveFood();
@@ -249,7 +249,7 @@ var LayerBlocks = cc.Layer.extend({
         
         self._direction = dir;
         
-        cc.log(dir);
+        //cc.log(dir);
 
     },
 
@@ -277,8 +277,40 @@ var LayerBlocks = cc.Layer.extend({
     
     moveFood : function () {
 
-        // todo
-        
+        var col_offset = Math.floor(cc.random0To1() * GlobalPara.columns);
+        var row_offset = Math.floor(cc.random0To1() * GlobalPara.rows);
+
+        var self = this;
+        var len = self._snake.length;
+
+        var pos = cc.p(0,0);
+        for(var c = col_offset ; c < GlobalPara.columns ; c++)
+        {
+            if(c == GlobalPara.columns -1) {
+                c = 0;
+            }
+
+            for(var r = row_offset ; r < GlobalPara.rows ; r++) {
+                if (r == GlobalPara.rows - 1) {
+                    r = 0;
+                }
+
+                pos = self.getPositionByDim(r,c);
+                var empty = true;
+                for(var i = 0 ; i < len ; i++ ) {
+                    if ((pos.x == self._snake[i].x) &&(pos.y == self._snake[i].y)){
+                        empty = false;
+                        break;
+                    }
+                }
+                if(empty)
+                {
+                    self._food.setPosition(pos);
+                    return;
+                }
+
+            }
+        }
     },
     
     
