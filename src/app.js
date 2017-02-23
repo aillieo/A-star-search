@@ -11,8 +11,14 @@ var HelloWorldScene = cc.Scene.extend({
         var layerBlocks = new LayerBlocks();
         this.addChild(layerBlocks);
 
-        var layerOperation = new LayerOperation();
-        this.addChild(layerOperation);
+        if(GlobalPara.enableAI) {
+
+        }
+        else {
+            var layerOperation = new LayerOperation();
+            this.addChild(layerOperation);
+        }
+
     }
 });
 

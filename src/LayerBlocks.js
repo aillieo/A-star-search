@@ -9,6 +9,7 @@ var LayerBlocks = cc.Layer.extend({
     _snake:[],
     _direction:0, // 0 up ; 1 right ; 2 down ; 3 left
     _timer : 0,
+    _food : null,
     ctor:function () {
 
 
@@ -19,18 +20,24 @@ var LayerBlocks = cc.Layer.extend({
         
         self.initSnake();
 
+        self.initFood();
 
 
-        var operationListener = cc.EventListener.create({
-            event: cc.EventListener.CUSTOM,
-            target : self,
-            eventName: "OPERATION",
-            callback: self.handleOperation
-        });
-        cc.eventManager.addListener(operationListener,self);
+        if(GlobalPara.enableAI) {
 
-        //cc.eventManager.dispatchCustomEvent("ENABLE_TOUCH");
+        }
+        else {
 
+            var operationListener = cc.EventListener.create({
+                event: cc.EventListener.CUSTOM,
+                target: self,
+                eventName: "OPERATION",
+                callback: self.handleOperation
+            });
+            cc.eventManager.addListener(operationListener, self);
+
+            //cc.eventManager.dispatchCustomEvent("ENABLE_TOUCH");
+        }
         this.scheduleUpdate();
 
         return true;
@@ -112,28 +119,24 @@ var LayerBlocks = cc.Layer.extend({
 
     },
 
+    initFood : function () {
 
-    update: function(delta) {
+        var wid = GlobalPara.blockWidth;
+        var self = this;
+        this._food = new cc.Sprite(res.blank);
+        this._food.setTextureRect(cc.rect(0,0,wid,wid));
+        this._food.setPosition(self.getPositionByDim(0,0));
+
+        self.addChild(self._food);
+
+        self.moveFood();
+
+    },
+
+    checkSnakeHead : function () {
 
         var self = this;
-        if(!self.moveTimer( delta))
-        {
-            return;
-        }
-
-
         var len = self._snake.length ;
-
-
-        for(var i = 0 ; i < len-1 ;i++)
-        {
-            self._snake[i].preMove();
-        }
-        for(var j = 0 ; j < len-1 ;j++)
-        {
-            self._snake[j].move();
-        }
-
 
         var move_x = 0;
         var move_y = 0;
@@ -155,9 +158,78 @@ var LayerBlocks = cc.Layer.extend({
         }
 
         var current_pos = self._snake[len-1].getPosition();
-        self._snake[len-1].setPosition(current_pos.x+move_x , current_pos.y + move_y);
+        var next_pos = cc.p(current_pos.x+move_x , current_pos.y + move_y);
 
-    
+
+        // four bounds
+        if((next_pos.x > self._basePoint.x + GlobalPara.columns*(GlobalPara.blockGap + GlobalPara.blockWidth))
+            ||(next_pos.x < self._basePoint.x)
+            ||(next_pos.y > self._basePoint.y + GlobalPara.rows*(GlobalPara.blockGap + GlobalPara.blockWidth))
+            ||(next_pos.y < self._basePoint.y))
+        {
+            self.onGameOver();
+            return false;
+        }
+
+
+        // snake body
+        for(var i = 0 ; i<len -1 ; i++)
+        {
+            if(self._snake[i].getPosition() == next_pos)
+            {
+                self.onGameOver();
+                return false;
+            }
+        }
+
+
+        // catch food
+        if((next_pos.x == self._food.x) && (next_pos.y == self._food.y))
+        {
+            cc.log("catch food");
+
+            self.snakeGrow();
+            self.moveFood();
+
+            return false;
+        }
+
+
+
+
+
+        self._snake[len-1].setPosition(next_pos);
+        return true;
+
+
+    },
+
+    update: function(delta) {
+
+        var self = this;
+        if(!self.moveTimer( delta))
+        {
+            return;
+        }
+
+
+        var len = self._snake.length ;
+
+
+        for(var i = 0 ; i < len-1 ;i++)
+        {
+            self._snake[i].preMove();
+        }
+
+        if(self.checkSnakeHead())
+        {
+            for(var j = 0 ; j < len-1 ;j++)
+            {
+                self._snake[j].move();
+            }
+        }
+
+
     },
 
     handleOperation:function(event){
@@ -193,9 +265,42 @@ var LayerBlocks = cc.Layer.extend({
         }
         return false;
 
+    },
+    
+    
+    onGameOver : function () {
+
+        this.unscheduleUpdate();
+        cc.log("GAME OVER");
+
+    },
+    
+    moveFood : function () {
+
+        // todo
+        
+    },
+    
+    
+    snakeGrow : function () {
+
+        var self = this;
+        var block = new BlockElement();
+        //block.setRow(row);
+        //block.setCol(col);
+
+        self.addChild(block);
+
+        block.setPosition(self._food.getPosition());
+
+        var len = self._snake.length ;
+
+        self._snake[len-1].setNextBlock(block);
+        self._snake.push(block);
+
     }
 
-
+    
 
 });
 
