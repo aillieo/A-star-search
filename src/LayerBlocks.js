@@ -8,6 +8,7 @@ var LayerBlocks = cc.Layer.extend({
     _basePoint:null,
     _snake:[],
     _direction:0, // 0 up ; 1 right ; 2 down ; 3 left
+    _next_direction:0,
     _timer : 0,
     _food : null,
     ctor:function () {
@@ -175,7 +176,7 @@ var LayerBlocks = cc.Layer.extend({
         // snake body
         for(var i = 0 ; i<len -1 ; i++)
         {
-            if(self._snake[i].getPosition() == next_pos)
+            if((self._snake[i].x == next_pos.x) && (self._snake[i].y == next_pos.y))
             {
                 self.onGameOver();
                 return false;
@@ -220,7 +221,9 @@ var LayerBlocks = cc.Layer.extend({
         {
             self._snake[i].preMove();
         }
-
+        
+        self._direction = self._next_direction;
+        
         if(self.checkSnakeHead())
         {
             for(var j = 0 ; j < len-1 ;j++)
@@ -239,16 +242,15 @@ var LayerBlocks = cc.Layer.extend({
 
         var dat = event.getUserData();
 
-        var p = dat.pt;
+        //var p = dat.pt;
+        
         var dir = dat.dir;
-
         if((dir == self._direction)||(Math.abs(dir - self._direction)==2))
         {
             return;
         }
         
-        self._direction = dir;
-        
+        self._next_direction = dir;
         //cc.log(dir);
 
     },

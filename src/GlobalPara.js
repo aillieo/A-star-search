@@ -4,12 +4,12 @@
 
 var GlobalPara = {
 
-    blockWidth : 60,
+    blockWidth : 30,
     blockTypes : 5,
-    columns : 9,
-    rows: 12,
+    columns : 15,
+    rows: 20,
     blockGap : 5,
     enableAI : false,
-    moveInterval : 0.5
+    moveInterval : 0.3
 
 };

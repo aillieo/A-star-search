@@ -97,24 +97,30 @@ var LayerOperation = cc.Layer.extend({
          // 0 up ; 1 right ; 2 down ; 3 left
         var tmpDir = -1;
         
-        if(deltaX >10){
+        if(Math.abs(deltaX) > Math.abs(deltaY))
+        {
+            if(deltaX >10){
 
-            tmpDir = 1;
+                tmpDir = 1;
 
+            }
+            else if (deltaX < -10) {
+
+                tmpDir = 3;
+
+            }
         }
-        else if (deltaX < -10) {
+        else
+        {
+            if (deltaY >10){
 
-            tmpDir = 3;
-
+                tmpDir = 0;
         }
-        else if (deltaY >10){
+            else if (deltaY < -10) {
 
-            tmpDir = 0;
-        }
-        else if (deltaY < -10) {
+                tmpDir = 2;
 
-            tmpDir = 2;
-
+            }
         }
 
 
