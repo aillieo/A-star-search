@@ -7,7 +7,8 @@
 var LayerBlocks = cc.Layer.extend({
     _basePoint:null,
     _snake:[],
-    _dirction:0, // 0 up ; 1 right ; 2 down ; 3 left
+    _direction:0, // 0 up ; 1 right ; 2 down ; 3 left
+    _timer : 0,
     ctor:function () {
 
 
@@ -70,9 +71,9 @@ var LayerBlocks = cc.Layer.extend({
         {
             c = (c + 1)/2;
         }
-        for(var r = 0; r< 3; r++) {
+        for(var r = 2; r >= 0; r--) {
 
-                self.createBlock(r,c);
+            self.createBlock(r,c);
 
         }
 
@@ -87,12 +88,17 @@ var LayerBlocks = cc.Layer.extend({
         var block = new BlockElement();
         block.setRow(row);
         block.setCol(col);
-        
-        self.addChild(block);
-        self._snake.unshift(block);
 
-        block.setPosition( self.getPositionByDim(row,col));
-        
+        self.addChild(block);
+
+        block.setPosition(self.getPositionByDim(row, col));
+
+        var len = self._snake.length ;
+        if (len > 0) {
+            block.setNextBlock(self._snake[0]);
+        }
+
+        self._snake.unshift(block);
     },
 
     getPositionByDim:function(row,col) {
@@ -108,7 +114,49 @@ var LayerBlocks = cc.Layer.extend({
 
 
     update: function(delta) {
-    
+
+        var self = this;
+        if(!self.moveTimer( delta))
+        {
+            return;
+        }
+
+
+        var len = self._snake.length ;
+
+
+        for(var i = 0 ; i < len-1 ;i++)
+        {
+            self._snake[i].preMove();
+        }
+        for(var j = 0 ; j < len-1 ;j++)
+        {
+            self._snake[j].move();
+        }
+
+
+        var move_x = 0;
+        var move_y = 0;
+        var moveDis = GlobalPara.blockWidth + GlobalPara.blockGap;
+        switch (this._direction)
+        {
+            case 0:
+                move_y = moveDis;
+                break;
+            case 1:
+                move_x = moveDis;
+                break;
+            case 2:
+                move_y = - moveDis;
+                break;
+            case 3:
+                move_x = - moveDis;
+                break;
+        }
+
+        var current_pos = self._snake[len-1].getPosition();
+        self._snake[len-1].setPosition(current_pos.x+move_x , current_pos.y + move_y);
+
     
     },
 
@@ -122,8 +170,6 @@ var LayerBlocks = cc.Layer.extend({
         var p = dat.pt;
         var dir = dat.dir;
 
-
-
         if((dir == self._direction)||(Math.abs(dir - self._direction)==2))
         {
             return;
@@ -132,6 +178,20 @@ var LayerBlocks = cc.Layer.extend({
         self._direction = dir;
         
         cc.log(dir);
+
+    },
+
+
+    moveTimer : function (delta){
+
+        var self = this;
+        self._timer += delta;
+        if(self._timer > GlobalPara.moveInterval)
+        {
+            self._timer -= GlobalPara.moveInterval;
+            return true;
+        }
+        return false;
 
     }
 

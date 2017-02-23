@@ -18,7 +18,9 @@ var BlockElement = cc.Sprite.extend({
         self.setColor(cc.color(10,10,60));
         var wid = GlobalPara.blockWidth;
         self.setTextureRect(cc.rect(0,0,wid,wid));
-        
+
+        self._next_pos = cc.p(0,0);
+
         return true;
     },
 
@@ -50,14 +52,20 @@ var BlockElement = cc.Sprite.extend({
     },
     
     preMove : function () {
-        
-        this._next_pos = this._next_block.getPosition();
+
+        var self = this;
+        //cc.log("p1",self.y,self._next_block.y,self._next_pos.y);
+        self._next_pos.x  = self._next_block.getPositionX();
+        self._next_pos.y  = self._next_block.getPositionY();
+        //cc.log("p2",self.y,self._next_block.y,self._next_pos.y);
     },
     
     move : function () {
-    
+
         var self = this;
+        //cc.log("m1",self.y,self._next_block.y,self._next_pos.y);
         self.setPosition(self._next_pos);
+        //cc.log("m2",self.y,self._next_block.y,self._next_pos.y);
     }
 
 
