@@ -6,14 +6,16 @@
 var BlockElement = cc.Sprite.extend({
     _pos_col:0,
     _pos_row:0,
+    _next_block:null,
+    _next_pos:null,
     ctor:function () {
 
         this._super();
 
         var self = this;
-        self.setCascadeOpacityEnabled(true);
+        //self.setCascadeOpacityEnabled(true);
         self.setTexture(res.blank);
-        self.setColor(cc.color(98,98,98));
+        self.setColor(cc.color(10,10,60));
         var wid = GlobalPara.blockWidth;
         self.setTextureRect(cc.rect(0,0,wid,wid));
         
@@ -40,6 +42,22 @@ var BlockElement = cc.Sprite.extend({
     setCol : function (col) {
 
         this._pos_col = col;
+    },
+    
+    setNextBlock : function ( blk ) {
+        
+        this._next_block = blk;
+    },
+    
+    preMove : function () {
+        
+        this._next_pos = this._next_block.getPosition();
+    },
+    
+    move : function () {
+    
+        var self = this;
+        self.setPosition(self._next_pos);
     }
 
 

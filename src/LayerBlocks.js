@@ -6,7 +6,8 @@
 
 var LayerBlocks = cc.Layer.extend({
     _basePoint:null,
-    _blocks:[],
+    _snake:[],
+    _dirction:0, // 0 up ; 1 right ; 2 down ; 3 left
     ctor:function () {
 
 
@@ -14,15 +15,8 @@ var LayerBlocks = cc.Layer.extend({
 
         var self= this;
         var size = cc.winSize;
-
-        var bg = new cc.Sprite(res.HelloWorld_png);
-        bg.attr({
-            x: size.width / 2,
-            y: size.height / 2
-        });
-        self.addChild(bg, -1);
         
-        self.initMatrix();
+        self.initSnake();
 
 
 
@@ -36,12 +30,13 @@ var LayerBlocks = cc.Layer.extend({
 
         //cc.eventManager.dispatchCustomEvent("ENABLE_TOUCH");
 
+        this.scheduleUpdate();
 
         return true;
     },
 
 
-    initMatrix:function(){
+    initSnake:function(){
 
 
         var self = this;
@@ -61,13 +56,23 @@ var LayerBlocks = cc.Layer.extend({
 
         self._blocks = new Array(GlobalPara.columns * GlobalPara.rows);
 
-        for(var r = 0; r<GlobalPara.rows; r++) {
+        if(GlobalPara.rows < 4 || GlobalPara.columns < 1)
+        {
+            return;
+        }
 
-            for(var c = 0; c<GlobalPara.columns; c++){
+        var c = GlobalPara.columns - 1;
+        if (c%2 == 0)
+        {
+            c = c/2;
+        }
+        else
+        {
+            c = (c + 1)/2;
+        }
+        for(var r = 0; r< 3; r++) {
 
                 self.createBlock(r,c);
-
-            }
 
         }
 
@@ -84,7 +89,7 @@ var LayerBlocks = cc.Layer.extend({
         block.setCol(col);
         
         self.addChild(block);
-        self._blocks[row * GlobalPara.columns + col]=block;
+        self._snake.unshift(block);
 
         block.setPosition( self.getPositionByDim(row,col));
         
@@ -102,7 +107,10 @@ var LayerBlocks = cc.Layer.extend({
     },
 
 
-
+    update: function(delta) {
+    
+    
+    },
 
     handleOperation:function(event){
 
@@ -116,30 +124,14 @@ var LayerBlocks = cc.Layer.extend({
 
 
 
-        var dtRow = 0;
-        var dtCol = 0;
-
-
-        if(dir == "up"){
-            dtRow = 1;
+        if((dir == self._direction)||(Math.abs(dir - self._direction)==2))
+        {
+            return;
         }
-        else if(dir == "down"){
-            dtRow = -1;
-        }
-        else if(dir == "left"){
-            dtCol = -1;
-        }
-        else if(dir == "right"){
-            dtCol = 1;
-        }
-
-
-
+        
+        self._direction = dir;
+        
         cc.log(dir);
-
-        //self._blockSource.setScale(0.5);
-        //self._blockTarget.setScale(0.5);
-        self._needSwapAgain = true;
 
     }
 

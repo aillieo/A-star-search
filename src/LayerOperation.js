@@ -94,31 +94,31 @@ var LayerOperation = cc.Layer.extend({
         var deltaX = touchX - touchStartX;
         var deltaY = touchY - touchStartY;
 
-
-
-        var tmpDir = "";
+         // 0 up ; 1 right ; 2 down ; 3 left
+        var tmpDir = -1;
+        
         if(deltaX >10){
 
-            tmpDir = "right";
+            tmpDir = 1;
 
         }
         else if (deltaX < -10) {
 
-            tmpDir = "left";
+            tmpDir = 3;
 
         }
         else if (deltaY >10){
 
-            tmpDir = "up";
+            tmpDir = 0;
         }
         else if (deltaY < -10) {
 
-            tmpDir = "down";
+            tmpDir = 2;
 
         }
 
 
-        if(tmpDir == ""){
+        if(tmpDir == -1){
 
             return;
 

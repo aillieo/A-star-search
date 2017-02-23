@@ -64,13 +64,14 @@ var LayerBackground = cc.Layer.extend({
 
         var self = this;
 
-        var block = new BlockElement();
-        block.setRow(row);
-        block.setCol(col);
+        var block = new cc.Sprite(res.blank);
+        
 
         self.addChild(block);
-        self._blocks[row * GlobalPara.columns + col]=block;
-
+        //self._blocks[row * GlobalPara.columns + col]=block;
+        block.setColor(cc.color(98,98,98));
+        var wid = GlobalPara.blockWidth;
+        block.setTextureRect(cc.rect(0,0,wid,wid));
         block.setPosition( self.getPositionByDim(row,col));
 
     },
